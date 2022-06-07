@@ -10,7 +10,8 @@ function Login(){
         <>
         <Header
             headerName=''
-            headerPath='/login'
+            headerLinkName=''
+            headerLinkSign='/login'
             headerSign= {['', 'Sign In']}
         />
         <main className="main bg-dark">

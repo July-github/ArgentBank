@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { FaUserCircle } from "react-icons/fa";
 import PropTypes from 'prop-types'
 
-function Header({headerName, headerPath, headerSign}){
+function Header({headerName, headerLinkName, headerLinkSign, headerSign}){
 
     return(
         <header>
@@ -12,12 +12,14 @@ function Header({headerName, headerPath, headerSign}){
                 <h1 className="sr-only">Argent Bank</h1>
             </nav>
             <nav className='headerItem'>
-                <div className='main-nav-item headerUser'>
-                    <FaUserCircle className="main-nav-item-logo" />
-                    <p>{headerName}</p>
+                <div className='main-nav-item'>
+                    <Link to={headerLinkName}>
+                        <FaUserCircle className="main-nav-item-logo" />
+                        {headerName}
+                    </Link>
                 </div>
                 <div className='main-nav-item'>
-                    <Link to={headerPath}>
+                    <Link to={headerLinkSign}>
                         {headerSign}
                     </Link>
                 </div>
@@ -29,7 +31,8 @@ function Header({headerName, headerPath, headerSign}){
 Header.propTypes = {
     headerName: PropTypes.string.isRequired,
     headerSign: PropTypes.array.isRequired,
-    headerPath: PropTypes.string.isRequired,
+    headerLinkName: PropTypes.string.isRequired,
+    headerLinkSign: PropTypes.string.isRequired,
 }
 
 export default Header

@@ -10,9 +10,10 @@ function Profile(){
     return(
         <>
         <Header
-            headerName='Tony'
-            headerPath='/'
-            headerSign= {[<FaSignOutAlt className='headerOut' />, ' Sign Out']}
+            headerName=' Tony'
+            headerLinkName='/Profile'
+            headerLinkSign='/'
+            headerSign= {[<FaSignOutAlt className='main-nav-item-logo' />, ' Sign Out']}
         />
         <main className="main bg-dark">
             <div className="header">

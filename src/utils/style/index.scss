@@ -43,12 +43,7 @@ header {
 }
 // .main-nav-item .router-link-exact-active {
 //   color: #42b983;
-// }
-
-.headerUser > p{
-    margin: 0 0.5rem;
-    font-weight: bold;
-}
+// }s
 
 .main-nav-item a {
   text-decoration: none;
@@ -56,11 +51,6 @@ header {
   font-weight: bold;
   color: #2c3e50;
   vertical-align: middle;
-}
-
-.headerOut{
-  vertical-align: middle;
-  margin-bottom: 0.2rem;
 }
 
 .main-nav-item {
@@ -71,12 +61,15 @@ header {
     text-decoration: underline;
     // color: #42b983;
   }
-}
 
-.main-nav-item
+  & > svg{
+    margin-bottom: 0.2rem;
+  }
+}
 
 .main-nav-item-logo{
   vertical-align: middle;
+  margin-bottom: 0.2rem;
 }
 
 .main-nav-logo {

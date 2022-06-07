@@ -10,7 +10,8 @@ function Home(){
         <>
         <Header
             headerName=''
-            headerPath='/login'
+            headerLinkName=''
+            headerLinkSign='/login'
             headerSign={['', 'Sign In']}
         />
         <main>

@@ -3,10 +3,16 @@ import FeatureCard from '../../components/FeatureCard/index'
 import chat from '../../assets/icon-chat.png'
 import money from '../../assets/icon-money.png'
 import security from '../../assets/icon-security.png'
-
+import Header from '../../components/Header/index'
 
 function Home(){
     return(
+        <>
+        <Header
+            headerName=''
+            headerPath='/login'
+            headerSign={['', 'Sign In']}
+        />
         <main>
             <div className="hero">
                 <section className="hero-content">
@@ -35,7 +41,8 @@ function Home(){
                     featureInfos='We use top of the line encryption to make sure your data and money is always safe.'
                 />
             </section>
-      </main>  
+      </main>
+      </>
     )
 }
 

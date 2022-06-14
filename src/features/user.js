@@ -1,5 +1,5 @@
 import produce from 'immer'
-import { selectUser } from '../utils/selectors'
+import { Navigate } from 'react-router-dom'
 
 const initialState = {
     tokenStatus: 'void',
@@ -74,6 +74,7 @@ export default function userReducer (state = initialState, action) {
                 }
                 if(draft.tokenStatus === 'rejected'){
                     draft.tokenStatus = 'pending'; 
+                    console.log(draft.error)
                     draft.error = null;
                     return;
                 }
@@ -96,7 +97,7 @@ export default function userReducer (state = initialState, action) {
             case TOKENREJECTED:{
                 if(draft.tokenStatus === 'pending' || draft.tokenStatus === 'updating'){
                     draft.tokenStatus = 'rejected';
-                    draft.error = action.payload;
+                    draft.error = action.payload.message;
                     draft.data = null;
                     return;
                 }
@@ -108,7 +109,7 @@ export default function userReducer (state = initialState, action) {
     })
 }
 
-export function fetchUserToken(store, email, password){
+export async function fetchUserToken(store, email, password){
     const tokenStatus = store.getState().tokenStatus
 
     if((tokenStatus === 'pending') || (tokenStatus === 'updating')){
@@ -124,11 +125,20 @@ export function fetchUserToken(store, email, password){
         body: JSON.stringify({email, password}),
     };
 
-
-    fetch('http://localhost:3001/api/v1/user/login', options)
-        .then (response => response.json())
-        .then (response => store.dispatch(userTokenResolved(response.data)))
-        .catch (error => store.dispatch(userTokenRejected(error)))
+    try {
+        const response = await fetch('http://localhost:3001/api/v1/user/login', options)
+            
+        if(response.status === 400) {alert('invalid')}
+        if(response.status === 500) {alert('server error')}
+        
+        const data = await response.json();  
+        store.dispatch(userTokenResolved(data.body.token)); 
+        return data.body.token
+    }
+    catch(error) {
+        store.dispatch(userTokenRejected(error))
+        console.log(error)
+    }
 }
 
 export function fetchUserData(store, token){
@@ -145,9 +155,8 @@ export function fetchUserData(store, token){
             Authorization: `Bearer ${token}`,
         },
     };
-
-    fetch('http://localhost:3001/api/v1/user/profile', options)
+    return fetch('http://localhost:3001/api/v1/user/profile', options)
         .then (response => response.json())
-        .then (response => store.dispatch(userDataResolved(response.data)))
+        .then (data => store.dispatch(userDataResolved(data)))
         .catch (error => store.dispatch(userDataRejected(error)))
 }

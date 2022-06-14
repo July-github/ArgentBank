@@ -1,12 +1,8 @@
 import '../../utils/style/index.scss'
-import { useNavigate } from 'react-router-dom'
 import Header from '../../components/Header/index'
 import Button from '../../components/Button/index'
 import AccountWrap from '../../components/AccountWrap/index'
 import { FaSignOutAlt } from "react-icons/fa"
-import { useState, useEffect } from 'react'
-import fetchUsers from '../../features/user'
-import store from '../../utils/store'
 
 function Profile(){
 

@@ -12,13 +12,13 @@ import { useStore } from 'react-redux'
 function Login(){
     const store = useStore()
     const navigate = useNavigate()
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const [email, setEmail] = useState()
+    const [password, setPassword] = useState()
     
-    async function signIn(e){
+    function signIn(e){
 
         e.preventDefault()
-        const token = await fetchUserToken(store, email, password)
+        const token = fetchUserToken(store, email, password)
         fetchUserData(store, token)
         navigate('/profile') 
     }

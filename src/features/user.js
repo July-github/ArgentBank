@@ -56,7 +56,7 @@ export default function userReducer (state = initialState, action) {
                 }
                 return;
             }
-            
+
             case DATAREJECTED:{
                 if(draft.dataStatus === 'pending' || draft.dataStatus === 'updating'){
                     draft.dataStatus = 'rejected';
@@ -109,7 +109,7 @@ export default function userReducer (state = initialState, action) {
 }
 
 export function fetchUserToken(store, email, password){
-    const tokenStatus = selectUser(store.getState()).tokenStatus
+    const tokenStatus = store.getState().tokenStatus
 
     if((tokenStatus === 'pending') || (tokenStatus === 'updating')){
         return;
@@ -127,12 +127,12 @@ export function fetchUserToken(store, email, password){
 
     fetch('http://localhost:3001/api/v1/user/login', options)
         .then (response => response.json())
-        .then (data => store.dispatch(userTokenResolved(data)))
+        .then (response => store.dispatch(userTokenResolved(response.data)))
         .catch (error => store.dispatch(userTokenRejected(error)))
 }
 
 export function fetchUserData(store, token){
-    const status = selectUser(store.getState()).dataStatus
+    const status = store.getState().dataStatus
 
     if((status === 'pending') || (status === 'updating')){
         return;
@@ -148,6 +148,6 @@ export function fetchUserData(store, token){
 
     fetch('http://localhost:3001/api/v1/user/profile', options)
         .then (response => response.json())
-        .then (data => store.dispatch(userDataResolved(data)))
+        .then (response => store.dispatch(userDataResolved(response.data)))
         .catch (error => store.dispatch(userDataRejected(error)))
 }

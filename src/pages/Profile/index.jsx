@@ -3,20 +3,27 @@ import Header from '../../components/Header/index'
 import Button from '../../components/Button/index'
 import AccountWrap from '../../components/AccountWrap/index'
 import { FaSignOutAlt } from "react-icons/fa"
+import { selectUser } from '../../utils/selectors'
+import { useSelector, useDispatch } from 'react-redux'
+import { useEffect } from 'react'
+import { fetchUserData } from '../../features/user'
 
 function Profile(){
+
+    const userData = useSelector(selectUser)
+    console.log(userData.data.firstname)
 
     return(
         <div>
             <Header
-                headerName=' Tony' //user.firstname
+                headerName={userData.data.firstName}
                 headerLinkName='/Profile'
                 headerLinkSign='/'
                 headerSign= {[<FaSignOutAlt className='main-nav-item-logo' />, ' Sign Out']}
             />
             <main className="main bg-dark">
                 <div className="header">
-                    <h1>Welcome back<br />Tony !</h1>
+                    <h1>Welcome back<br />{userData.data.firstName} !</h1>
                     <Button 
                         buttonClass='edit-button'
                         buttonTitle='Edit Name'

@@ -1,5 +1,5 @@
-import produce from 'immer'
-import { Navigate } from 'react-router-dom'
+import { selectUser } from '../utils/selectors'
+import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     tokenStatus: 'void',
@@ -9,29 +9,18 @@ const initialState = {
     token: null,
 }
 
-const DATAFETCHING = 'user/dataFetching'
-const DATARESOLVED = 'user/dataResolved'
-const DATAREJECTED = 'user/dataRejected'
-const TOKENFETCHING = 'user/tokenFetching'
-const TOKENRESOLVED = 'user/tokenResolved'
-const TOKENREJECTED = 'user/tokenRejected'
-
-
-const userDataFetching = () => ({type: DATAFETCHING})
-const userDataResolved = (data) => ({type: DATARESOLVED, payload: data})
-const userDataRejected = (error) => ({type: DATAREJECTED, payload: error})
-const userTokenFetching = () => ({type: TOKENFETCHING})
-const userTokenResolved = (data) => ({type: TOKENRESOLVED, payload: data})
-const userTokenRejected = (error) => ({type: TOKENREJECTED, payload: error})
-
-
-export default function userReducer (state = initialState, action) {
-    return produce (state, (draft) => {
-        if(state === undefined){
-            return initialState;
-        }
-        switch (action.type){
-            case DATAFETCHING:{
+const { actions, reducer } = createSlice({
+    name: 'login',
+    initialState,
+    reducers: {
+        userDataFetching: { 
+            prepare: (token) => ({
+                    payload: {token}
+                }),
+            reducer: (draft, action) => {
+                if(draft.dataStatus === undefined){
+                    return initialState;
+                }
                 if(draft.dataStatus === 'void'){
                     draft.dataStatus = 'pending'; 
                     return;
@@ -45,36 +34,52 @@ export default function userReducer (state = initialState, action) {
                     draft.dataStatus = 'updating'; 
                     return;
                 }
-                return;
-            }
-
-            case DATARESOLVED:{
+                },
+        },
+        userDataResolved: { 
+            prepare: (token, data) => ({
+                payload: {token, data}
+            }),
+            reducer: (draft, action) => {
+                if(draft.dataStatus === undefined){
+                    return initialState;
+                }
                 if(draft.dataStatus === 'pending' || draft.dataStatus === 'updating'){
                     draft.dataStatus = 'resolved';
-                    draft.data = action.payload;
+                    draft.data = action.payload.data;
+                    draft.token = action.payload.token
                     return;
                 }
-                return;
-            }
-
-            case DATAREJECTED:{
+        }},
+        userDataRejected: {
+            prepare: (token, error) => ({
+                payload: {token, error}
+            }),
+            reducer: (draft, action) => {
+                if(draft.dataStatus === undefined){
+                    return initialState;
+                }
                 if(draft.dataStatus === 'pending' || draft.dataStatus === 'updating'){
                     draft.dataStatus = 'rejected';
                     draft.error = action.payload;
                     draft.data = null;
                     return;
                 }
-                return;
-            }
-
-            case TOKENFETCHING:{
+        }},
+        userTokenFetching: {
+            prepare: (userLogin) => ({
+                payload: {userLogin}
+            }),
+            reducer: (draft, action) => {
+                if(draft.tokenStatus === undefined){
+                    return initialState;
+                }
                 if(draft.tokenStatus === 'void'){
                     draft.tokenStatus = 'pending'; 
                     return;
                 }
                 if(draft.tokenStatus === 'rejected'){
                     draft.tokenStatus = 'pending'; 
-                    console.log(draft.error)
                     draft.error = null;
                     return;
                 }
@@ -82,81 +87,227 @@ export default function userReducer (state = initialState, action) {
                     draft.tokenStatus = 'updating'; 
                     return;
                 }
-                return;
-            }
-
-            case TOKENRESOLVED:{
+        }},
+        userTokenResolved: {
+            prepare: (userLogin, token) => ({
+                payload: {userLogin, token}
+            }),
+            reducer: (draft, action) => {
+                if(draft.tokenStatus === undefined){
+                    return initialState;
+                }
                 if(draft.tokenStatus === 'pending' || draft.tokenStatus === 'updating'){
                     draft.tokenStatus = 'resolved';
                     draft.data = action.payload;
+                    console.log(draft.data)
                     return;
                 }
-                return;
-            }
-
-            case TOKENREJECTED:{
+        }},
+        userTokenRejected: {
+            prepare: (userLogin, error) => ({
+                payload: {userLogin, error}
+            }),
+            reducer: (draft, action) => {
+                if(draft.tokenStatus === undefined){
+                    return initialState;
+                }
                 if(draft.tokenStatus === 'pending' || draft.tokenStatus === 'updating'){
                     draft.tokenStatus = 'rejected';
                     draft.error = action.payload.message;
                     draft.data = null;
                     return;
                 }
-                return;
-            }
-            default:
-                return;
+        }},
+    },
+})
+
+export default reducer
+
+export function fetchUserToken(userLogin){
+
+    return async (dispatch, getState) => {
+
+        const tokenStatus = selectUser(getState()).tokenStatus
+
+        if((tokenStatus === 'pending') || (tokenStatus === 'updating')){
+            return;
         }
-    })
-}
-
-export async function fetchUserToken(store, email, password){
-    const tokenStatus = store.getState().tokenStatus
-
-    if((tokenStatus === 'pending') || (tokenStatus === 'updating')){
-        return;
-    }
-    store.dispatch(userTokenFetching());
-
-    const options = {
-        method: 'POST',
-        headers:{
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({email, password}),
-    };
-
-    try {
-        const response = await fetch('http://localhost:3001/api/v1/user/login', options)
+        dispatch(actions.userTokenFetching(userLogin));
+    
+        const options = {
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userLogin),
+        };
+    
+        try {
+            const response = await fetch('http://localhost:3001/api/v1/user/login', options)
+                console.log(response)
+            if(response.status === 400) {alert('invalid fields')}
+            if(response.status === 500) {alert('server problem')}
             
-        if(response.status === 400) {alert('invalid')}
-        if(response.status === 500) {alert('server error')}
-        
-        const data = await response.json();  
-        store.dispatch(userTokenResolved(data.body.token)); 
-        return data.body.token
-    }
-    catch(error) {
-        store.dispatch(userTokenRejected(error))
-        console.log(error)
+            const data = await response.json();  
+            console.log(data)
+
+            dispatch(actions.userTokenResolved(data.body.token));
+            return data.body.token
+        }
+        catch(error) {
+            dispatch(actions.userTokenRejected(error.message))
+            console.log(error)
+        }
     }
 }
 
-export function fetchUserData(store, token){
-    const status = store.getState().dataStatus
+export function fetchUserData(token){
 
-    if((status === 'pending') || (status === 'updating')){
-        return;
+    return async (dispatch, getState) => {
+
+        const status = selectUser(getState()).dataStatus
+
+        if((status === 'pending') || (status === 'updating')){
+            return;
+        }
+        dispatch(actions.userDataFetching(token));
+
+        const options = {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        };
+        try {
+            const response = await fetch('http://localhost:3001/api/v1/user/profile', options)
+            console.log(response)
+            if(response.status === 400) {alert('invalid fields')}
+            if(response.status === 500) {alert('server problem')}
+            
+            const data = await response.json();  
+            console.log(data)
+
+            dispatch(actions.userDataResolved(token, data.body))
+            console.log(data.body)
+            
+        }
+        catch (error) {
+            dispatch(actions.userDataRejected(error.message))
+        }
     }
-    store.dispatch(userDataFetching());
-
-    const options = {
-        method: 'POST',
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    };
-    return fetch('http://localhost:3001/api/v1/user/profile', options)
-        .then (response => response.json())
-        .then (data => store.dispatch(userDataResolved(data)))
-        .catch (error => store.dispatch(userDataRejected(error)))
 }
+
+// const userLogin = {email, password}
+// const userDataFetching = createAction('user/dataFetching', (token) => ({
+//     payload: {token}
+// }))
+// const userDataResolved = createAction('user/dataResolved', (token, data) => ({
+//     payload: {token, data}
+// }))
+// const userDataRejected = createAction('user/dataRejected', (token, error) => ({
+//     payload: {token, error}
+// }))
+// const userTokenFetching = createAction('user/tokenFetching', (userLogin) => ({
+//     payload: {userLogin}
+// }))
+// const userTokenResolved = createAction('user/tokenResolved', (userLogin, token) => ({
+//     payload: {userLogin, token}
+// }))
+// const userTokenRejected = createAction('user/tokenRejected', (userLogin, error) => ({
+//     payload: {userLogin, error}
+// }))
+
+
+// export default createReducer (initialState, (builder) => {
+
+//     builder
+//         .addCase(userDataFetching, (draft, action) => {
+//             if(draft.dataStatus === undefined){
+//                 return initialState;
+//             }
+//             if(draft.dataStatus === 'void'){
+//                 draft.dataStatus = 'pending'; 
+//                 return;
+//             }
+//             if(draft.dataStatus === 'rejected'){
+//                 draft.dataStatus = 'pending'; 
+//                 draft.error = null;
+//                 return;
+//             }
+//             if(draft.dataStatus === 'resolved'){
+//                 draft.dataStatus = 'updating'; 
+//                 return;
+//             }
+//             return;
+//         })
+
+//         .addCase(userDataResolved, (draft, action) => {
+//             if(draft.dataStatus === undefined){
+//                 return initialState;
+//             }
+//             if(draft.dataStatus === 'pending' || draft.dataStatus === 'updating'){
+//                 draft.dataStatus = 'resolved';
+//                 draft.data = action.payload.data;
+//                 return;
+//             }
+//             return;
+//         })
+
+//         .addCase(userDataRejected, (draft, action) => {
+//             if(draft.dataStatus === undefined){
+//                 return initialState;
+//             }
+//             if(draft.dataStatus === 'pending' || draft.dataStatus === 'updating'){
+//                 draft.dataStatus = 'rejected';
+//                 draft.error = action.payload;
+//                 draft.data = null;
+//                 return;
+//             }
+//             return;
+//         })
+
+//         .addCase(userTokenFetching, (draft, action) => {
+//             if(draft.tokenStatus === undefined){
+//                 return initialState;
+//             }
+//             if(draft.tokenStatus === 'void'){
+//                 draft[action.payload.userLogin].tokenStatus = 'pending'; 
+//                 return;
+//             }
+//             if(draft.tokenStatus === 'rejected'){
+//                 draft.tokenStatus = 'pending'; 
+//                 draft.error = null;
+//                 return;
+//             }
+//             if(draft.tokenStatus === 'resolved'){
+//                 draft.tokenStatus = 'updating'; 
+//                 return;
+//             }
+//             return;
+//         })
+
+//         .addCase(userTokenResolved, (draft, action) => {
+//             if(draft.tokenStatus === undefined){
+//                 return initialState;
+//             }
+//             if(draft.tokenStatus === 'pending' || draft.tokenStatus === 'updating'){
+//                 draft.tokenStatus = 'resolved';
+//                 draft[action.payload.userLogin].data = action.payload;
+//                 return;
+//             }
+//             return;
+//         })
+
+//         .addCase(userTokenRejected, (draft, action) => {
+//             if(draft.tokenStatus === undefined){
+//                 return initialState;
+//             }
+//             if(draft.tokenStatus === 'pending' || draft.tokenStatus === 'updating'){
+//                 draft.tokenStatus = 'rejected';
+//                 draft.error = action.payload.message;
+//                 draft.data = null;
+//                 return;
+//             }
+//             return;
+//         })
+// })

@@ -6,11 +6,11 @@ import Button from '../../components/Button/index'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import {fetchUserData, fetchUserToken} from '../../features/user'
-import { useStore } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 
 function Login(){
-    const store = useStore()
+    const dispatch = useDispatch()
     const navigate = useNavigate()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -18,13 +18,18 @@ function Login(){
     async function signIn(e){
 
         e.preventDefault()
-        const token = await fetchUserToken(store, email, password)
+        
+        const userLogin = { email, password }
+        const token = await dispatch(fetchUserToken(userLogin))
         console.log(token)
-        fetchUserData(store, token)
+        dispatch(fetchUserData(token))
 
-        if(token===undefined){navigate('/login')}
-
-        else {navigate('/profile')}
+        if(token === undefined ){
+            navigate('/login')
+        }
+        else {
+            navigate('/profile')
+        }
     }
 
     return(

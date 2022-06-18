@@ -7,28 +7,37 @@ import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import {fetchUserData, fetchUserToken} from '../../features/user'
 import { useDispatch } from 'react-redux'
-
+import LoginPage from '../../components/LoginPage/index'
+import { selectUser } from '../../utils/selectors'
+import { useSelector } from 'react-redux'
 
 function Login(){
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const isLoading = useSelector(selectUser).isLoading
     
     async function signIn(e){
-
+        const remember = document.getElementById('remember-me').checked
         e.preventDefault()
         
         const userLogin = { email, password }
-        const token = await dispatch(fetchUserToken(userLogin))
-        console.log(token)
+        const token = await dispatch(fetchUserToken(userLogin))    
+
         dispatch(fetchUserData(token))
+
+        if(remember===true){
+            localStorage.setItem('token', token)
+            localStorage.setItem('isRemembered', remember)
+        }
 
         if(token === undefined ){
             navigate('/login')
         }
         else {
-            navigate('/profile')
+            isLoading? <div>Loading...</div>
+            : navigate('/profile')
         }
     }
 
@@ -37,8 +46,7 @@ function Login(){
             <Header
                 headerName=''
                 headerLinkName=''
-                headerLinkSign='/login'
-                headerSign= {['', 'Sign In']}
+                headerLinkSign= {<LoginPage />}
             />
             <main className="main bg-dark">
                 <section className='sign-in-content'>

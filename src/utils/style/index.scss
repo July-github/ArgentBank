@@ -46,12 +46,28 @@ header {
 //   color: #42b983;
 // }s
 
+#signOut{
+  display: flex;
+
+  > p{
+    margin: 0 0 0 5px
+  }
+  > svg{
+    margin-top: 3px;
+  }
+}
+
 .main-nav-item a {
   text-decoration: none;
   margin-right: 0.5rem;
   font-weight: bold;
   color: #2c3e50;
   vertical-align: middle;
+}
+
+.main-nav-item-signin{
+  font-weight: bold;
+
 }
 
 .main-nav-item {
@@ -181,4 +197,14 @@ header {
 .header {
   color: #fff;
   margin-bottom: 2rem;
+}
+
+#editName{
+  display: none;
+  width: 30%;
+  margin : 5px auto;
+}
+#editDiv{
+  display: flex;
+  justify-content: center;
 }

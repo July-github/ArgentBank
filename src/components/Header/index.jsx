@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { FaUserCircle } from "react-icons/fa";
 import PropTypes from 'prop-types'
 
-function Header({headerName, headerLinkName, headerLinkSign, headerSign}){
+function Header({headerName, headerLinkName, headerLinkSign}){
 
     return(
         <header>
@@ -19,9 +19,7 @@ function Header({headerName, headerLinkName, headerLinkSign, headerSign}){
                     </Link>
                 </div>
                 <div className='main-nav-item'>
-                    <Link to={headerLinkSign}>
-                        {headerSign}
-                    </Link>
+                    {headerLinkSign}
                 </div>
             </nav>
         </header>
@@ -30,9 +28,8 @@ function Header({headerName, headerLinkName, headerLinkSign, headerSign}){
 
 Header.propTypes = {
     headerName: PropTypes.string.isRequired,
-    headerSign: PropTypes.array.isRequired,
     headerLinkName: PropTypes.string.isRequired,
-    headerLinkSign: PropTypes.string.isRequired,
+    headerLinkSign: PropTypes.node.isRequired,
 }
 
 export default Header

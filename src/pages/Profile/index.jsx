@@ -2,32 +2,51 @@ import '../../utils/style/index.scss'
 import Header from '../../components/Header/index'
 import Button from '../../components/Button/index'
 import AccountWrap from '../../components/AccountWrap/index'
-import { FaSignOutAlt } from "react-icons/fa"
 import { selectUser } from '../../utils/selectors'
-import { useSelector, useDispatch } from 'react-redux'
-import { useEffect } from 'react'
-import { fetchUserData } from '../../features/user'
+import { useSelector } from 'react-redux'
+import LogOutPage from '../../components/LogOutPage/index'
+import FormInput from "../../components/FormInput/index"
+import { useState } from 'react'
 
 function Profile(){
-
     const userData = useSelector(selectUser)
-    console.log(userData.data.firstname)
+    const isLoading = useSelector(selectUser).isLoading
+    const [first, setFirstName] = useState('')
+    const [last, setLastName] = useState('')
 
+
+    // onChange={(e) => setFirstName(e.target.value)}
     return(
+        isLoading? <div>Loading...</div> :
         <div>
-            <Header
+            <Header 
                 headerName={userData.data.firstName}
                 headerLinkName='/Profile'
-                headerLinkSign='/'
-                headerSign= {[<FaSignOutAlt className='main-nav-item-logo' />, ' Sign Out']}
+                headerLinkSign= {<LogOutPage />}
             />
             <main className="main bg-dark">
                 <div className="header">
-                    <h1>Welcome back<br />{userData.data.firstName} !</h1>
-                    <Button 
-                        buttonClass='edit-button'
-                        buttonTitle='Edit Name'
-                    />
+                    <h1>Welcome back<br />{userData.data.firstName} {userData.data.lastName} !</h1>
+                    <div id="editDiv">
+                        <Button 
+                            buttonClass='edit-button'
+                            buttonTitle='Edit Name'
+                        />
+                    </div>
+                    <div id="editName">
+                        <div id='editFirstName' placeholder={userData.data.firstName}>                            
+                        </div>
+                        <div id='editLastName' value={userData.data.lastName} >  
+                        </div>
+                        <Button 
+                            buttonClass='saveEditButton'
+                            buttonTitle='saveEditButton'
+                        />
+                        <Button 
+                            buttonClass='cancelEditButton'
+                            buttonTitle='cancelEditButton'
+                        />
+                    </div>
                 </div>
                 <h2 className="sr-only">Accounts</h2>
                 <AccountWrap 

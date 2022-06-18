@@ -7,7 +7,9 @@ const initialState = {
     data: null,
     error: null,
     token: null,
+    isLoading: false,
 }
+const isRemembered = localStorage.getItem('isRemembered')
 
 const { actions, reducer } = createSlice({
     name: 'login',
@@ -21,17 +23,28 @@ const { actions, reducer } = createSlice({
                 if(draft.dataStatus === undefined){
                     return initialState;
                 }
+                if(isRemembered){
+                    draft.tokenStatus = "resolved"
+                    draft.data = action.payload;
+                    draft.dataStatus = 'pending'; 
+                    draft.isLoading = true;
+                    return;
+                }
+
                 if(draft.dataStatus === 'void'){
                     draft.dataStatus = 'pending'; 
+                    draft.isLoading = true;
                     return;
                 }
                 if(draft.dataStatus === 'rejected'){
                     draft.dataStatus = 'pending'; 
                     draft.error = null;
+                    draft.isLoading = true;
                     return;
                 }
                 if(draft.dataStatus === 'resolved'){
                     draft.dataStatus = 'updating'; 
+                    draft.isLoading = true;
                     return;
                 }
                 },
@@ -47,7 +60,8 @@ const { actions, reducer } = createSlice({
                 if(draft.dataStatus === 'pending' || draft.dataStatus === 'updating'){
                     draft.dataStatus = 'resolved';
                     draft.data = action.payload.data;
-                    draft.token = action.payload.token
+                    draft.token = action.payload.token;
+                    draft.isLoading = false;
                     return;
                 }
         }},
@@ -63,6 +77,7 @@ const { actions, reducer } = createSlice({
                     draft.dataStatus = 'rejected';
                     draft.error = action.payload;
                     draft.data = null;
+                    draft.isLoading = false;
                     return;
                 }
         }},
@@ -76,15 +91,18 @@ const { actions, reducer } = createSlice({
                 }
                 if(draft.tokenStatus === 'void'){
                     draft.tokenStatus = 'pending'; 
+                    draft.isLoading = true;
                     return;
                 }
                 if(draft.tokenStatus === 'rejected'){
                     draft.tokenStatus = 'pending'; 
                     draft.error = null;
+                    draft.isLoading = true;
                     return;
                 }
                 if(draft.tokenStatus === 'resolved'){
                     draft.tokenStatus = 'updating'; 
+                    draft.isLoading = true;
                     return;
                 }
         }},
@@ -99,7 +117,7 @@ const { actions, reducer } = createSlice({
                 if(draft.tokenStatus === 'pending' || draft.tokenStatus === 'updating'){
                     draft.tokenStatus = 'resolved';
                     draft.data = action.payload;
-                    console.log(draft.data)
+                    draft.isLoading = false;
                     return;
                 }
         }},
@@ -115,6 +133,7 @@ const { actions, reducer } = createSlice({
                     draft.tokenStatus = 'rejected';
                     draft.error = action.payload.message;
                     draft.data = null;
+                    draft.isLoading = false;
                     return;
                 }
         }},
@@ -144,19 +163,18 @@ export function fetchUserToken(userLogin){
     
         try {
             const response = await fetch('http://localhost:3001/api/v1/user/login', options)
-                console.log(response)
+            
             if(response.status === 400) {alert('invalid fields')}
             if(response.status === 500) {alert('server problem')}
             
             const data = await response.json();  
-            console.log(data)
 
             dispatch(actions.userTokenResolved(data.body.token));
+            
             return data.body.token
         }
         catch(error) {
             dispatch(actions.userTokenRejected(error.message))
-            console.log(error)
         }
     }
 }
@@ -178,18 +196,52 @@ export function fetchUserData(token){
                 Authorization: `Bearer ${token}`,
             },
         };
+        
         try {
             const response = await fetch('http://localhost:3001/api/v1/user/profile', options)
-            console.log(response)
+            
             if(response.status === 400) {alert('invalid fields')}
             if(response.status === 500) {alert('server problem')}
             
             const data = await response.json();  
-            console.log(data)
 
             dispatch(actions.userDataResolved(token, data.body))
-            console.log(data.body)
+
+        }
+        catch (error) {
+            dispatch(actions.userDataRejected(error.message))
+        }
+    }
+}
+
+export function updateUserData(token){
+
+    return async (dispatch, getState) => {
+
+        const status = selectUser(getState()).dataStatus
+
+        if((status === 'pending') || (status === 'updating')){
+            return;
+        }
+        dispatch(actions.userDataFetching(token));
+
+        const options = {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        };
+        
+        try {
+            const response = await fetch('http://localhost:3001/api/v1/user/profile', options)
             
+            if(response.status === 400) {alert('invalid fields')}
+            if(response.status === 500) {alert('server problem')}
+            
+            const data = await response.json();  
+
+            dispatch(actions.userDataResolved(token, data.body))
+
         }
         catch (error) {
             dispatch(actions.userDataRejected(error.message))

@@ -7,15 +7,35 @@ import { useSelector } from 'react-redux'
 import LogOutPage from '../../components/LogOutPage/index'
 import FormInput from "../../components/FormInput/index"
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { updateUserData } from '../../features/user'
+import { useEffect } from 'react'
 
 function Profile(){
     const userData = useSelector(selectUser)
+    const navigate = useNavigate()
     const isLoading = useSelector(selectUser).isLoading
-    const [first, setFirstName] = useState('')
-    const [last, setLastName] = useState('')
+    const [nameEdition, setNameEdition] = useState(false)
+    const [firstN, setFirstN] = useState('')
+    const [lastN, setLastN] = useState('')
 
+    function editName(e){
+        e.preventDefault()
 
-    // onChange={(e) => setFirstName(e.target.value)}
+        const userAttributes = { firstN, lastN }
+        const token = (localStorage.getItem('token') || sessionStorage.getItem('token') || userData.token)
+
+        updateUserData(token, userAttributes)
+        setNameEdition(false)
+
+        console.log(token, userAttributes)
+
+    }
+
+    if(userData===undefined){
+        navigate('/login')
+    }
+
     return(
         isLoading? <div>Loading...</div> :
         <div>
@@ -26,27 +46,37 @@ function Profile(){
             />
             <main className="main bg-dark">
                 <div className="header">
-                    <h1>Welcome back<br />{userData.data.firstName} {userData.data.lastName} !</h1>
-                    <div id="editDiv">
-                        <Button 
-                            buttonClass='edit-button'
-                            buttonTitle='Edit Name'
-                        />
-                    </div>
-                    <div id="editName">
-                        <div id='editFirstName' placeholder={userData.data.firstName}>                            
-                        </div>
-                        <div id='editLastName' value={userData.data.lastName} >  
-                        </div>
-                        <Button 
-                            buttonClass='saveEditButton'
-                            buttonTitle='saveEditButton'
-                        />
-                        <Button 
-                            buttonClass='cancelEditButton'
-                            buttonTitle='cancelEditButton'
-                        />
-                    </div>
+                        {nameEdition?
+                            <>
+                            <h1>Welcome back !</h1>
+                            <form id="editName"  onSubmit={(e) => editName(e)}>
+                                <div id='editName_inputs'>
+                                    <FormInput className='editFirstName'
+                                    label=''
+                                    value={userData.data.firstName}
+                                    setValue={(e) => setFirstN(e.target.value)}
+                                    />
+                                    <FormInput className='editLastName'
+                                        label=''
+                                        value={userData.data.lastName}
+                                        setValue={(e) => setLastN(e.target.value)}            
+                                    />
+                                </div>
+                                <div id='editName_buttons'>
+                                    <button type='submit' className='saveEditButton'>
+                                        Save</button>
+                                    <button className='cancelEditButton' onClick={() => setNameEdition(false)}>
+                                        Cancel</button>
+                                </div>
+                            </form>
+                            </>
+                            :
+                            <>
+                            <h1>Welcome back<br />{userData.data.firstName} {userData.data.lastName} !</h1>
+                            <button onClick={() => setNameEdition(true)} className='edit-button'>
+                                Edit Name</button>
+                            </>
+                            }
                 </div>
                 <h2 className="sr-only">Accounts</h2>
                 <AccountWrap 

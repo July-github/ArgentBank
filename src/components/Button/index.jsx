@@ -3,7 +3,9 @@ import PropTypes from 'prop-types'
 function Button({buttonTitle, buttonClass}){
 
     return(
-        <button className={buttonClass}>{buttonTitle}</button>
+        <button className={buttonClass}>
+            {buttonTitle}
+        </button>
     )
 }
 

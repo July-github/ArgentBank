@@ -15,7 +15,7 @@ function LoginPage(){
 
         if(isRemembered) {
             dispatch(fetchUserData(data))
-            navigate('/profile')
+            navigate('/profile')            
         }
         else{
             navigate('/login')

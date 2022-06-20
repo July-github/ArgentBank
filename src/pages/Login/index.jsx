@@ -30,12 +30,18 @@ function Login(){
         if(remember===true){
             localStorage.setItem('token', token)
             localStorage.setItem('isRemembered', remember)
+            localStorage.setItem('email', email)
+            localStorage.setItem('password', password)
         }
 
         if(token === undefined ){
             navigate('/login')
         }
         else {
+            sessionStorage.setItem('token', token)
+            sessionStorage.setItem('email', email)
+            sessionStorage.setItem('password', password)
+
             isLoading? <div>Loading...</div>
             : navigate('/profile')
         }
@@ -55,12 +61,12 @@ function Login(){
                     <form onSubmit={signIn}>
                         <FormInput 
                             label='Username'
-                            value={email}
+                            placeholder=''
                             setValue={(e) => setEmail(e.target.value)}
                         />
                         <FormInput 
                             label='Password'
-                            value={password}
+                            placeholder=''
                             setValue={(e) => setPassword(e.target.value)}
                         />
                         <div className="input-remember">

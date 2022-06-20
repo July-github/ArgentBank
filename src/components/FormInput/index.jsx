@@ -11,7 +11,7 @@ function FormInput({label, value, setValue}){
             <input 
                 type="text" 
                 id={label} 
-                value={value}
+                placeholder={value}
                 onChange={setValue}
             />
         </div>
@@ -20,8 +20,8 @@ function FormInput({label, value, setValue}){
 
 FormInput.propTypes = {
     label: PropTypes.string.isRequired,
-    value: PropTypes.string.isRequired,
-    setValue: PropTypes.func.isRequired,
+    value: PropTypes.string,
+    setValue: PropTypes.func,
 }
 
 export default FormInput

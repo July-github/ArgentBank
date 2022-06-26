@@ -3,19 +3,12 @@ import FeatureCard from '../../components/FeatureCard/index'
 import chat from '../../assets/icon-chat.png'
 import money from '../../assets/icon-money.png'
 import security from '../../assets/icon-security.png'
-import Header from '../../components/Header/index'
-import LoginPage from '../../components/LoginPage/index'
-import React from 'react' 
+import React from 'react'
 
 function Home(){
-
+            
     return(
         <>
-        <Header
-            headerName=''
-            headerLinkName=''
-            headerLinkSign= {<React.Fragment><LoginPage /></React.Fragment>}
-        />
         <main>
             <div className="hero">
                 <section className="hero-content">

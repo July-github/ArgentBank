@@ -1,5 +1,4 @@
 import '../../utils/style/index.scss'
-import Header from '../../components/Header/index'
 import { FaUserCircle } from "react-icons/fa"
 import FormInput from '../../components/FormInput/index'
 import Button from '../../components/Button/index'
@@ -7,7 +6,6 @@ import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import {fetchUserData, fetchUserToken} from '../../features/user'
 import { useDispatch } from 'react-redux'
-import LoginPage from '../../components/LoginPage/index'
 import { selectUser } from '../../utils/selectors'
 import { useSelector } from 'react-redux'
 
@@ -17,7 +15,7 @@ function Login(){
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const isLoading = useSelector(selectUser).isLoading
-    
+
     async function signIn(e){
         const remember = document.getElementById('remember-me').checked
         e.preventDefault()
@@ -49,11 +47,6 @@ function Login(){
 
     return(
         <>
-            <Header
-                headerName=''
-                headerLinkName=''
-                headerLinkSign= {<LoginPage />}
-            />
             <main className="main bg-dark">
                 <section className='sign-in-content'>
                     <FaUserCircle className="main-nav-item-logo" />

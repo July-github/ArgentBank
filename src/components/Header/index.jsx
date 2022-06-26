@@ -1,11 +1,17 @@
 import logo from '../../assets/argentBankLogo.png'
 import { Link } from 'react-router-dom'
 import { FaUserCircle } from "react-icons/fa";
-import PropTypes from 'prop-types'
+import LoginPage from '../../components/LoginPage/index'
+import LogOutPage from '../../components/LogOutPage/index'
+import { selectUser } from '../../utils/selectors'
+import { useSelector } from 'react-redux'
 
-function Header({headerName, headerLinkName, headerLinkSign}){
+function Header(){
+    const userData = useSelector(selectUser)
+    const token = (localStorage.getItem('token') || sessionStorage.getItem('token'))    
 
     return(
+        token && userData.data?
         <header>
             <nav className="main-nav-logo">
                 <Link to='/'><img className="main-nav-logo-image" src={logo} alt='Argent Bank logo'/></Link>
@@ -13,23 +19,34 @@ function Header({headerName, headerLinkName, headerLinkSign}){
             </nav>
             <nav className='headerItem'>
                 <div className='main-nav-item'>
-                    <Link to={headerLinkName}>
+                    <Link to='/Profile'>
                         <FaUserCircle className="main-nav-item-logo" />
-                        {headerName}
+                        {userData.data.firstName}
                     </Link>
                 </div>
                 <div className='main-nav-item'>
-                    {headerLinkSign}
+                    <LogOutPage />
+                </div>
+            </nav>
+        </header>
+        :
+        <header>
+            <nav className="main-nav-logo">
+                <Link to='/'><img className="main-nav-logo-image" src={logo} alt='Argent Bank logo'/></Link>
+                <h1 className="sr-only">Argent Bank</h1>
+            </nav>
+            <nav className='headerItem'>
+                <div className='main-nav-item'>
+                    <Link to='/'>
+                        <FaUserCircle className="main-nav-item-logo" />
+                    </Link>
+                </div>
+                <div className='main-nav-item'>
+                    <LoginPage />
                 </div>
             </nav>
         </header>
     )
-}
-
-Header.propTypes = {
-    headerName: PropTypes.string.isRequired,
-    headerLinkName: PropTypes.string.isRequired,
-    headerLinkSign: PropTypes.node.isRequired,
 }
 
 export default Header

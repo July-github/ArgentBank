@@ -1,49 +1,58 @@
 import '../../utils/style/index.scss'
-import Header from '../../components/Header/index'
 import Button from '../../components/Button/index'
 import AccountWrap from '../../components/AccountWrap/index'
 import { selectUser } from '../../utils/selectors'
 import { useSelector } from 'react-redux'
-import LogOutPage from '../../components/LogOutPage/index'
 import FormInput from "../../components/FormInput/index"
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { updateUserData } from '../../features/user'
 import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import {fetchUserData} from '../../features/user'
 
 function Profile(){
     const userData = useSelector(selectUser)
+    const dispatch = useDispatch()
     const navigate = useNavigate()
     const isLoading = useSelector(selectUser).isLoading
     const [nameEdition, setNameEdition] = useState(false)
     const [firstN, setFirstN] = useState('')
     const [lastN, setLastN] = useState('')
 
+    useEffect(() => {
+        if((userData.data===undefined)|| (userData.data===null)){
+            const token = (localStorage.getItem('token') || sessionStorage.getItem('token'))
+        console.log(token)
+
+            if((token)) {
+                dispatch(fetchUserData(token))
+            }
+            else{
+                localStorage.clear()
+                    sessionStorage.clear()
+                navigate('/login')
+            }
+        }
+    }, [navigate, userData.data, dispatch])
+
+
     function editName(e){
         e.preventDefault()
 
-        const userAttributes = { firstN, lastN }
         const token = (localStorage.getItem('token') || sessionStorage.getItem('token') || userData.token)
 
-        updateUserData(token, userAttributes)
+        dispatch(updateUserData(token, firstN, lastN))
         setNameEdition(false)
 
-        console.log(token, userAttributes)
+        console.log(token, firstN, lastN)
 
     }
 
-    if(userData===undefined){
-        navigate('/login')
-    }
 
     return(
         isLoading? <div>Loading...</div> :
         <div>
-            <Header 
-                headerName={userData.data.firstName}
-                headerLinkName='/Profile'
-                headerLinkSign= {<LogOutPage />}
-            />
             <main className="main bg-dark">
                 <div className="header">
                         {nameEdition?

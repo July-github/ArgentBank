@@ -1,21 +1,27 @@
 import {fetchUserData} from '../../features/user'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import Login from '../../pages/Login/index'
 
 function LoginPage(){
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const data = localStorage.getItem('token')
+    const token = localStorage.getItem('token')
 
     const isRemembered = localStorage.getItem('isRemembered')
 
     function remember(){
 
         if(isRemembered) {
-            dispatch(fetchUserData(data))
-            navigate('/profile')            
+            const response = dispatch(fetchUserData(token))
+            console.log(response.status)
+            if(response.status === 401 ) {
+                localStorage.clear()
+                return <Login />
+            }
+            navigate('/profile')   
         }
         else{
             navigate('/login')

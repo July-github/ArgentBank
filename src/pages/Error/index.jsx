@@ -1,23 +1,24 @@
 import '../../utils/style/index.scss'
-import Header from '../../components/Header/index'
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
-
-function Error(){
+function Error({responseStatus}){
     return(
-        <>
-            <Header
-                headerName=''
-                headerLinkName=''
-                headerLinkSign='/login'
-                headerSign={['', 'Sign In']}
-            />
-            <main className="main bg-dark">
-                <p className='errorText'>The page you're looking for doesn't exist</p>
-                <Link to='/' className='errorText backHome'>Back to Home page</Link>
-            </main>
-        </>
+        <main className="main bg-dark">
+            {responseStatus===500 ?
+            <p className='errorText'>The server has a problem !</p>
+        :(
+            <p className='errorText'>The page you're looking for doesn't exist</p>
+        )}  
+            <Link to='/' className='errorText backHome'>Back to Home page</Link>
+        </main>
+        
     )
 }
+
+Error.propTypes={
+    responseStatus: PropTypes.number
+}
+
 
 export default Error

@@ -1,6 +1,4 @@
-import { selectUser } from '../utils/selectors'
 import { createSlice } from '@reduxjs/toolkit'
-import Login from '../pages/Login/index'
  
 const initialState = {
     tokenStatus: 'void',
@@ -13,6 +11,10 @@ const initialState = {
 const isRemembered = localStorage.getItem('isRemembered')
 console.log(isRemembered)
 
+/**
+ * function that creates action creators & action types for slice 'login'
+ * @returns an object 
+ */
 const { actions, reducer } = createSlice({
     name: 'login',
     initialState,
@@ -138,7 +140,6 @@ const { actions, reducer } = createSlice({
             reducer: (draft, action) => {
                 draft.data.firstName = action.payload.firstName;
                 draft.data.lastName = action.payload.lastName;
-                draft.token = action.payload.token;
                 draft.isLoading = false;
                 return;
             }
@@ -147,113 +148,5 @@ const { actions, reducer } = createSlice({
             reducer:() => { return initialState }},
     }})
 
-export default reducer
-
-export function signOut(){
-    return (dispatch, getState) => {
-        dispatch(actions.reset())
-    } 
-}
-
-export function fetchUserToken(userLogin){
-
-    return async (dispatch, getState) => {
-
-        const tokenStatus = selectUser(getState()).tokenStatus
-
-        if((tokenStatus === 'pending') || (tokenStatus === 'updating')){
-            return;
-        }
-        dispatch(actions.userTokenFetching(userLogin));
-    
-        const options = {
-            method: 'POST',
-            headers:{
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userLogin),
-        };
-    
-        try {
-            const response = await fetch('http://localhost:3001/api/v1/user/login', options)
-            
-            if(response.status === 400) {alert('invalid fields')}
-            if(response.status === 500) {alert('server problem')}
-            if(response.status === 401) {return <Login />}
-
-            const data = await response.json();  
-
-            dispatch(actions.userTokenResolved(data.body.token));
-            
-            return data.body.token
-        }
-        catch(error) {
-            dispatch(actions.userTokenRejected(error.message))
-        }
-    }
-}
-
-export function fetchUserData(token){
-
-    return async (dispatch, getState) => {
-
-        const status = selectUser(getState()).dataStatus
-
-        if((status === 'pending') || (status === 'updating')){
-            return;
-        }
-        dispatch(actions.userDataFetching(token));
-
-        const options = {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        };
-        
-        try {
-            const response = await fetch('http://localhost:3001/api/v1/user/profile', options)
-            
-            if(response.status === 400) {alert('invalid fields')}
-            if(response.status === 500) {alert('server problem')}
-            if(response.status === 401) {
-                localStorage.clear()
-                return <Login />
-            }
-            const data = await response.json();  
-
-            dispatch(actions.userDataResolved(token, data.body))
-
-        }
-        catch (error) {
-            dispatch(actions.userDataRejected(error.message))
-        }
-    }
-}
-
-export function updateUserData(token, firstName, lastName){
-
-    return async (dispatch, getState) => {
-
-        const options = {
-            method: 'PUT',
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({firstName, lastName}),
-        };
-        
-        try {
-            const response = await fetch('c', options)
-            
-            if(response.status === 400) {alert('invalid fields')}
-            if(response.status === 500) {alert('server problem')}
-            if(response.status === 401) {return <Login /> }
-
-            dispatch(actions.userUpdateProfile(token, firstName, lastName))
-        }
-        catch (error) {
-            dispatch(actions.userDataRejected(error.message))
-        }
-    }
-}
+    export {actions}
+    export default reducer

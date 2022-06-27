@@ -1,18 +1,22 @@
 import { Link } from 'react-router-dom'
 import { FaSignOutAlt } from "react-icons/fa"
 import { useDispatch } from 'react-redux'
-import { signOut } from '../../features/user'
+import { signOut } from '../../redux/actions'
 
 function LogOutPage(){
     const dispatch = useDispatch()
 
-function clear(){
-    return (
-        localStorage.clear(),
-        sessionStorage.clear(),
-        dispatch(signOut())
-    )
-}
+    /**
+     * Reset all the user's datas from the Redux State & storage
+     * @returns the initialState
+     */
+    function clear(){
+        return (
+            localStorage.clear(),
+            sessionStorage.clear(),
+            dispatch(signOut())
+        )
+    }
  
     return (
         <Link to={''}>

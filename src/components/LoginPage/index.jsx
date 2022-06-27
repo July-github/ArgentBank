@@ -1,7 +1,6 @@
-import {fetchUserData} from '../../features/user'
+import { fetchUserData } from '../../redux/actions'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import Login from '../../pages/Login/index'
 
 function LoginPage(){
 
@@ -9,18 +8,15 @@ function LoginPage(){
     const navigate = useNavigate()
 
     const token = localStorage.getItem('token')
-
     const isRemembered = localStorage.getItem('isRemembered')
 
+    /**
+     * Navigate to the user's profile if he has checked the remember checkbox otherwise navigate to thhe login page
+     */
     function remember(){
 
         if(isRemembered) {
-            const response = dispatch(fetchUserData(token))
-            console.log(response.status)
-            if(response.status === 401 ) {
-                localStorage.clear()
-                return <Login />
-            }
+            dispatch(fetchUserData(token))
             navigate('/profile')   
         }
         else{

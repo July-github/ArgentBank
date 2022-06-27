@@ -1,42 +1,47 @@
 import '../../utils/style/index.scss'
-import Button from '../../components/Button/index'
 import AccountWrap from '../../components/AccountWrap/index'
-import { selectUser } from '../../utils/selectors'
+import { selectUser } from '../../redux/selectors'
 import { useSelector } from 'react-redux'
 import FormInput from "../../components/FormInput/index"
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { updateUserData } from '../../features/user'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import {fetchUserData} from '../../features/user'
+import { fetchUserData, updateUserData, signOut } from '../../redux/actions'
+import { useNavigate } from 'react-router-dom'
+
 
 function Profile(){
     const userData = useSelector(selectUser)
     const dispatch = useDispatch()
-    const navigate = useNavigate()
     const isLoading = useSelector(selectUser).isLoading
     const [nameEdition, setNameEdition] = useState(false)
     const [firstN, setFirstN] = useState('')
     const [lastN, setLastN] = useState('')
+    const token = (localStorage.getItem('token') || sessionStorage.getItem('token'))
+    const navigate = useNavigate()
 
     useEffect(() => {
-        if((userData.data===undefined)|| (userData.data===null)){
-            const token = (localStorage.getItem('token') || sessionStorage.getItem('token'))
-        console.log(token)
+        console.log(userData)
+        if(!userData.data){
+            console.log(token)
 
             if((token)) {
+                console.log('fetch')
                 dispatch(fetchUserData(token))
+                navigate('/profile')
             }
             else{
                 localStorage.clear()
-                    sessionStorage.clear()
-                navigate('/login')
+                sessionStorage.clear()
+                dispatch(signOut())
             }
         }
-    }, [navigate, userData.data, dispatch])
+    }, [dispatch, navigate, token, userData])
 
-
+    /**
+     * Edition of user's firstname and lastname to update to the server
+     * @param {event} e 
+     */
     function editName(e){
         e.preventDefault()
 
@@ -44,11 +49,7 @@ function Profile(){
 
         dispatch(updateUserData(token, firstN, lastN))
         setNameEdition(false)
-
-        console.log(token, firstN, lastN)
-
     }
-
 
     return(
         isLoading? <div>Loading...</div> :
@@ -74,7 +75,10 @@ function Profile(){
                                 <div id='editName_buttons'>
                                     <button type='submit' className='saveEditButton'>
                                         Save</button>
-                                    <button className='cancelEditButton' onClick={() => setNameEdition(false)}>
+                                    <button className='cancelEditButton' onClick={(e) => (
+                                            e.preventDefault(e), 
+                                            setNameEdition(false))
+                                        }>
                                         Cancel</button>
                                 </div>
                             </form>

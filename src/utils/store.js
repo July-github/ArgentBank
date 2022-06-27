@@ -1,7 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from '../features/user';
-import { fetchUserToken, fetchUserData } from '../features/user'
-
+import userReducer from '../redux/reducer';
+import { fetchUserToken, fetchUserData } from '../redux/reducer'
 
 const reduxDevtools = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 

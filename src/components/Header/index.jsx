@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { FaUserCircle } from "react-icons/fa";
 import LoginPage from '../../components/LoginPage/index'
 import LogOutPage from '../../components/LogOutPage/index'
-import { selectUser } from '../../utils/selectors'
+import { selectUser } from '../../redux/selectors'
 import { useSelector } from 'react-redux'
 
 function Header(){

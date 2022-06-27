@@ -4,9 +4,9 @@ import FormInput from '../../components/FormInput/index'
 import Button from '../../components/Button/index'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import {fetchUserData, fetchUserToken} from '../../features/user'
+import { fetchUserData, fetchUserToken } from '../../redux/actions'
 import { useDispatch } from 'react-redux'
-import { selectUser } from '../../utils/selectors'
+import { selectUser } from '../../redux/selectors'
 import { useSelector } from 'react-redux'
 
 function Login(){
@@ -16,6 +16,10 @@ function Login(){
     const [password, setPassword] = useState('')
     const isLoading = useSelector(selectUser).isLoading
 
+    /**
+     * Connect the user to his profile page
+     * @param {event} e 
+     */
     async function signIn(e){
         const remember = document.getElementById('remember-me').checked
         e.preventDefault()

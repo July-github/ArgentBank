@@ -114,6 +114,7 @@ export function updateUserData(token, firstName, lastName){
             method: 'PUT',
             headers: {
                 Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({firstName, lastName}),
         };
@@ -126,7 +127,8 @@ export function updateUserData(token, firstName, lastName){
                 <Error responseStatus={500}/>
             }
             if(response.status === 401) { dispatch(signOut()) }
-
+            const data = await response.json();  
+console.log(data.body)
             dispatch(actions.userUpdateProfile(token, firstName, lastName))
         }
 

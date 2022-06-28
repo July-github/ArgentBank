@@ -9,24 +9,22 @@ import { useDispatch } from 'react-redux'
 import { fetchUserData, updateUserData, signOut } from '../../redux/actions'
 import { useNavigate } from 'react-router-dom'
 
-
 function Profile(){
     const userData = useSelector(selectUser)
     const dispatch = useDispatch()
     const isLoading = useSelector(selectUser).isLoading
+    const navigate = useNavigate()
     const [nameEdition, setNameEdition] = useState(false)
     const [firstN, setFirstN] = useState('')
     const [lastN, setLastN] = useState('')
+    const [invalid, setInvalid] = useState(false)
     const token = (localStorage.getItem('token') || sessionStorage.getItem('token'))
-    const navigate = useNavigate()
 
     useEffect(() => {
-        console.log(userData)
+        
         if(!userData.data){
-            console.log(token)
 
             if((token)) {
-                console.log('fetch')
                 dispatch(fetchUserData(token))
                 navigate('/profile')
             }
@@ -47,8 +45,19 @@ function Profile(){
 
         const token = (localStorage.getItem('token') || sessionStorage.getItem('token') || userData.token)
 
-        dispatch(updateUserData(token, firstN, lastN))
+        const edit = dispatch(updateUserData(token, firstN, lastN))
+
+        if(!edit) {
+            setInvalid(true)
+            return;
+        }
+
+        setInvalid(false)
         setNameEdition(false)
+    }
+
+    if(!userData.data){
+        return null
     }
 
     return(
@@ -59,14 +68,17 @@ function Profile(){
                         {nameEdition?
                             <>
                             <h1>Welcome back !</h1>
+                            {invalid ? <div className='invalid_fields'>Invalid fields</div> : null}
                             <form id="editName"  onSubmit={(e) => editName(e)}>
                                 <div id='editName_inputs'>
                                     <FormInput className='editFirstName'
+                                    type='text'
                                     label=''
                                     value={userData.data.firstName}
                                     setValue={(e) => setFirstN(e.target.value)}
                                     />
                                     <FormInput className='editLastName'
+                                        type='text'
                                         label=''
                                         value={userData.data.lastName}
                                         setValue={(e) => setLastN(e.target.value)}            

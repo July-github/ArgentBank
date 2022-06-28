@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types'
 
-
-function FormInput({label, value, setValue}){
+function FormInput({label, value, setValue, type}){
 
     return(
         <div className="input-wrapper">
@@ -9,7 +8,7 @@ function FormInput({label, value, setValue}){
                 {label}
                 </label>
             <input 
-                type="text" 
+                type={type} 
                 id={label} 
                 placeholder={value}
                 onChange={setValue}
@@ -20,6 +19,7 @@ function FormInput({label, value, setValue}){
 
 FormInput.propTypes = {
     label: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
     value: PropTypes.string,
     setValue: PropTypes.func,
 }

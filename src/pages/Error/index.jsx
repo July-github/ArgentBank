@@ -20,5 +20,4 @@ Error.propTypes={
     responseStatus: PropTypes.number
 }
 
-
 export default Error

@@ -1,6 +1,6 @@
-import { selectUser } from './selectors'
 import Error from '../pages/Error/index'
 import { actions } from './reducer'
+import { selectUser } from '../redux/selectors'
 
 /**
  * Reset the user's datas in Redux state
@@ -10,6 +10,16 @@ export function signOut(){
     return (dispatch, getState) => {
         dispatch(actions.reset())
     } 
+}
+
+/**
+ * Set token in localStorage
+ * @param {jwt} token 
+ * @param {boolean} remember 
+ */
+export function setRemember(token, remember){
+    localStorage.setItem('token', token) 
+    localStorage.setItem('isRemembered', remember)
 }
 
 /**
@@ -39,7 +49,7 @@ export function fetchUserToken(userLogin){
         try {
             const response = await fetch('http://localhost:3001/api/v1/user/login', options)
             
-            if(response.status === 400) { alert('invalid fields') }
+            if(response.status === 400) { console.log('invalid fields') }
             if(response.status === 500) { 
                 <Error responseStatus={500}/> }
             if(response.status === 401) { dispatch(signOut()) }
@@ -82,7 +92,7 @@ export function fetchUserData(token){
         try {
             const response = await fetch('http://localhost:3001/api/v1/user/profile', options)
             
-            if(response.status === 400) { alert('invalid fields') }
+            if(response.status === 400) { console.log('invalid fields') }
             if(response.status === 500) { 
                 <Error responseStatus={500}/>
             }
@@ -122,13 +132,12 @@ export function updateUserData(token, firstName, lastName){
         try {
             const response = await fetch('http://localhost:3001/api/v1/user/profile', options)
             
-            if(response.status === 400) { alert('invalid fields') }
+            if(response.status === 400) { console.log('invalid fields') }
             if(response.status === 500) { 
                 <Error responseStatus={500}/>
             }
             if(response.status === 401) { dispatch(signOut()) }
-            const data = await response.json();  
-console.log(data.body)
+
             dispatch(actions.userUpdateProfile(token, firstName, lastName))
         }
 

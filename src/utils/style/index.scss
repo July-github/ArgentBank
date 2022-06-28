@@ -237,3 +237,12 @@ header {
   display: flex;
   justify-content: center;
 }
+
+.invalid_fields{
+  font-size: 1.2rem;
+  color: crimson;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 4px;
+  background-color: rgb(220, 20, 60, 0.3);
+}

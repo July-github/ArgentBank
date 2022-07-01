@@ -21,6 +21,7 @@ Phase 2 : Transactions - Il s’agirait de spécifier les endpoints d’API néc
 or
 * [Yarn](https://yarnpkg.com/)
 
+* [MongoDB Community Server](https://www.mongodb.com/try/download/community)
 
 ## 1.2 Installing the project
 

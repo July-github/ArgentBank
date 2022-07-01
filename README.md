@@ -1,4 +1,74 @@
-# Getting Started with Create React App
+![1597410191519_image2](https://user-images.githubusercontent.com/76209231/176850883-8ed17388-8085-4069-9c7e-ee2c40df691d.jpg)
+
+# Argent Bank
+
+Le projet concerne une nouvelle banque qui démarre, Argent Bank, qui essaie de percer dans le secteur et qui veut mettre en place son application. Le projet se décompose en plusieurs phases :
+
+Phase 1 : Authentification des utilisateurs - Création d'une application web permettant aux clients de se connecter et de gérer leurs comptes et leur profil.
+
+Phase 2 : Transactions - Il s’agirait de spécifier les endpoints d’API nécessaires pour une éventuelle deuxième mission une fois que nous aurons terminé la première.
+
+![library-react](https://user-images.githubusercontent.com/76209231/169810015-87e342f6-ce87-4033-8e16-8194630f88e0.svg)
+![tool-create-react-app](https://user-images.githubusercontent.com/76209231/169812977-cf802d09-7b36-4b2c-97ab-143955aef1fa.svg)
+![tool-sass](https://user-images.githubusercontent.com/76209231/169813018-fb083b76-0ea4-4a9c-816a-19786ccdd023.svg)
+![state-manager-redux](https://user-images.githubusercontent.com/76209231/176850855-196e3c78-434b-415d-8207-9b9483b819e6.svg)
+
+# 1. Launching the project
+
+## 1.1 Prerequisites
+
+* [NodeJS (version 12.18)](https://nodejs.org/en/) to run npm command
+or
+* [Yarn](https://yarnpkg.com/)
+
+
+## 1.2 Installing the project
+
+### Launching Back-End
+
+1. Clone the repo of the back-end
+
+    `git clone https://github.com/OpenClassrooms-Student-Center/Project-10-Bank-API.git`
+2. Install the dependencies by running the command 
+
+    `yarn` (or `yarn install`) or `npm i` (or `npm install`)
+3. Launch the back-end on port 3001 (http://localhost:3001) by running the command 
+
+    `yarn dev` or `npm run start`
+4. Populate database with two users
+
+    `npm run populate-db`
+
+  **Tony Stark**
+  * First Name: Tony
+  * Last Name: Stark
+  * Email: tony@stark.com
+  * Password: password123
+  
+  **Steve Rogers**
+  * First Name: Steve,
+  * Last Name: Rogers,
+  * Email: steve@rogers.com,
+  * Password: password456
+
+**API Documentation**
+
+To learn more about how the API works, once you have started your local environment, you can visit: http://localhost:3001/api-docs
+
+### Launching Front-End
+
+1. Clone the repo of the front-end
+
+    `git clone https://github.com/July-github/ArgentBank.git`
+2. Install the dependencies by running the command 
+
+    `yarn` (or `yarn install`) or `npm i` (or `npm install`)
+3. Launch the front-end on port 3000 (http://localhost:3000) by running the command 
+
+    `yarn start` or `npm start`
+
+
+# 2. Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

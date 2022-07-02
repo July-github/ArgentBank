@@ -1,0 +1,204 @@
+openapi: '3.0.2'
+info:
+  title: Argent Bank Transactions
+  version: '1.0'
+servers:
+  - url: localhost:3001/api/v1/user/profile
+paths:
+  /transactions:
+    get:
+      description: Fetch transactions of the user for the current month
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: Attach Bearer JWT token
+          schema:
+            type : string
+      responses:
+        '200':
+          description: user transactions for the current month retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transaction_id:
+                    type: integer
+                    example: 123 456
+                  account_title:
+                    type: string
+                    example: Argent Bank Checking
+                  account_amount:
+                    type: number
+                    example: 2 345
+                  account_amount_description: 
+                    type: string
+                    example: Available Balance
+        '201':
+          description: New resource has been created
+        '204':
+          description: No body content
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized - the request requires user authentication
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+        default:
+          description: Unexpected error
+  /transactions/{transaction_id}:
+    get:
+      description: 'Get details of a specific transaction'
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: Attach Bearer JWT token
+          schema:
+            type : string
+        - name: transaction_id
+          in: query
+          required: true
+          description: User's transaction ID
+          schema:
+            type : integer
+            example: 163 962
+      responses:
+        '200':
+          description: user transaction retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+        '201':
+          description: New resource has been created
+        '204':
+          description: No body content
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized - the request requires user authentication
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+        default:
+          description: Unexpected error
+    post:
+      description: 'Add new detail for a specific transaction'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                new_detail: 
+                  type: string
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: Attach Bearer JWT token
+          schema:
+            type : string
+        - name: transaction_id
+          in: query
+          required: true
+          description: User's transaction ID
+          schema:
+            type : integer
+            example: 163 962
+      responses:
+        '200':
+          description: user transaction new detail successfully added
+        '201':
+          description: New resource has been created
+        '204':
+          description: No body content
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized - the request requires user authentication
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+        default:
+          description: Unexpected error
+    put:
+      description: 'Update detail for a specific transaction'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: "object"
+              properties:
+                detail: 
+                  type: string
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: Attach Bearer JWT token
+          schema:
+            type : string
+        - name: transaction_id
+          in: query
+          required: true
+          description: User's transaction ID
+          schema:
+            type : integer
+            example: 163 962
+      responses:
+        '200':
+          description: user transaction detail successfully updated
+        '201':
+          description: New resource has been created
+        '204':
+          description: No body content
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized - the request requires user authentication
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+        default:
+          description: Unexpected error
+    delete:
+      description: 'Delete detail for a specific transaction'
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: Attach Bearer JWT token
+          schema:
+            type : string
+        - name: transaction_id
+          in: query
+          required: true
+          description: User's transaction ID
+          schema:
+            type : integer
+            example: 163 962
+      responses:
+        '200':
+          description: user transaction detail successfully deleted
+        '201':
+          description: New resource has been created
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized - the request requires user authentication
+        '404':
+          description: Not found
+        '500':
+          description: Internal server error
+        default:
+          description: Unexpected error

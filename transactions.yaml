@@ -4,37 +4,74 @@ info:
   version: '1.0'
 servers:
   - url: localhost:3001/api/v1/user/profile
+components:
+    securitySchemes:
+      bearerAuth:
+        type: http
+        scheme: bearer
+        bearerFormat: JWT
+    schemas:
+      Transaction:
+        type: object
+        properties:
+          transaction_id:
+            type: integer
+            example: 123 456
+          account_title:
+            type: string
+            example: Argent Bank Checking
+          account_amount:
+            type: number
+            example: 2 345
+          account_amount_description: 
+            type: string
+            example: Available Balance
+      ExtraTransactionInfos:
+        type: object
+        properties:
+          location:
+            type: string
+            example: Bordeaux
+          category:
+            type: string
+            example: holidays
+      NewDetail:
+        type: object
+        properties:
+          newDetailTitle:
+            type: string
+            example: NewTitle
+          newDetailInfo:
+            type: string
+            example: new info
+      APIResponse:
+        type: object
+        properties:
+          status: 
+            type: integer
+            example: 200
+          message:
+            type: string
+            example: transactions successfully retrieved
+          body:
+            allOf:
+              - $ref: '#/components/schemas/Transaction'
+              - $ref: '#/components/schemas/ExtraTransactionInfos'
 paths:
   /transactions:
     get:
+      security:
+        - bearerAuth: []
       description: Fetch transactions of the user for the current month
-      parameters:
-        - name: Authorization
-          in: header
-          required: true
-          description: Attach Bearer JWT token
-          schema:
-            type : string
       responses:
         '200':
           description: user transactions for the current month retrieved successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  transaction_id:
-                    type: integer
-                    example: 123 456
-                  account_title:
-                    type: string
-                    example: Argent Bank Checking
-                  account_amount:
-                    type: number
-                    example: 2 345
-                  account_amount_description: 
-                    type: string
-                    example: Available Balance
+                type: array
+                items:
+                  $ref: '#/components/schemas/APIResponse'
         '201':
           description: New resource has been created
         '204':
@@ -50,29 +87,27 @@ paths:
         default:
           description: Unexpected error
   /transactions/{transaction_id}:
+    parameters:
+      - name: transaction_id
+        in: path
+        required: true
+        description: User's transaction ID
+        schema:
+          type : integer
+          example: 163 962
     get:
+      security:
+        - bearerAuth: []
       description: 'Get details of a specific transaction'
-      parameters:
-        - name: Authorization
-          in: header
-          required: true
-          description: Attach Bearer JWT token
-          schema:
-            type : string
-        - name: transaction_id
-          in: query
-          required: true
-          description: User's transaction ID
-          schema:
-            type : integer
-            example: 163 962
       responses:
         '200':
           description: user transaction retrieved successfully
           content:
             application/json:
               schema:
-                type: object
+                type: array
+                items:
+                  $ref: '#/components/schemas/APIResponse'
         '201':
           description: New resource has been created
         '204':
@@ -88,30 +123,17 @@ paths:
         default:
           description: Unexpected error
     post:
+      security:
+        - bearerAuth: []
       description: 'Add new detail for a specific transaction'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: "object"
-              properties:
-                new_detail: 
-                  type: string
-      parameters:
-        - name: Authorization
-          in: header
-          required: true
-          description: Attach Bearer JWT token
-          schema:
-            type : string
-        - name: transaction_id
-          in: query
-          required: true
-          description: User's transaction ID
-          schema:
-            type : integer
-            example: 163 962
+              type: array
+              items:
+                $ref: '#/components/schemas/NewDetail'
       responses:
         '200':
           description: user transaction new detail successfully added
@@ -129,7 +151,27 @@ paths:
           description: Internal server error
         default:
           description: Unexpected error
+  /transactions/{transaction_id}/{location}:
+    parameters:
+      - name: transaction_id
+        in: path
+        required: true
+        description: User's transaction ID
+        schema:
+          type : integer
+          example: 163 962
+      - name: location
+        in: path
+        required: true
+        description: Transaction location
+        schema:
+          type : object
+          example: {
+            location: Bordeaux
+          }
     put:
+      security:
+        - bearerAuth: []
       description: 'Update detail for a specific transaction'
       requestBody:
         required: true
@@ -140,20 +182,6 @@ paths:
               properties:
                 detail: 
                   type: string
-      parameters:
-        - name: Authorization
-          in: header
-          required: true
-          description: Attach Bearer JWT token
-          schema:
-            type : string
-        - name: transaction_id
-          in: query
-          required: true
-          description: User's transaction ID
-          schema:
-            type : integer
-            example: 163 962
       responses:
         '200':
           description: user transaction detail successfully updated
@@ -172,26 +200,22 @@ paths:
         default:
           description: Unexpected error
     delete:
+      security:
+        - bearerAuth: []
       description: 'Delete detail for a specific transaction'
       parameters:
-        - name: Authorization
-          in: header
-          required: true
-          description: Attach Bearer JWT token
-          schema:
-            type : string
-        - name: transaction_id
-          in: query
-          required: true
-          description: User's transaction ID
-          schema:
-            type : integer
-            example: 163 962
+      - name: location
+        in: path
+        required: true
+        description: Info to delete
+        schema:
+          type : object
+          example: {
+            location: Bordeaux
+          }
       responses:
         '200':
           description: user transaction detail successfully deleted
-        '201':
-          description: New resource has been created
         '400':
           description: Bad request
         '401':

@@ -88,7 +88,7 @@ function Profile(){
                                     <button type='submit' className='saveEditButton'>
                                         Save</button>
                                     <button className='cancelEditButton' onClick={(e) => (
-                                            e.preventDefault(e), 
+                                            e.preventDefault(e),
                                             setNameEdition(false))
                                         }>
                                         Cancel</button>

@@ -6,7 +6,7 @@ import security from '../../assets/icon-security.png'
 import React from 'react'
 
 function Home(){
-            
+
     return(
         <>
         <main>

@@ -72,10 +72,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/APIResponse'
-        '201':
-          description: New resource has been created
-        '204':
-          description: No body content
         '400':
           description: Bad request
         '401':
@@ -108,10 +104,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/APIResponse'
-        '201':
-          description: New resource has been created
-        '204':
-          description: No body content
         '400':
           description: Bad request
         '401':

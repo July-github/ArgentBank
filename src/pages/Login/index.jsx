@@ -4,7 +4,7 @@ import FormInput from '../../components/FormInput/index'
 import Button from '../../components/Button/index'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { fetchUserData, fetchUserToken, setRemember, checkFields } from '../../redux/actions'
+import { fetchUserData, fetchUserToken, setRemember } from '../../redux/actions'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectUser } from '../../redux/selectors'
 

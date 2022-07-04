@@ -1,13 +1,15 @@
 import Error from '../pages/Error/index'
 import { actions } from './reducer'
 import { selectUser } from '../redux/selectors'
-
+import Login from '../pages/Login'
 /**
  * Reset the user's datas in Redux state
  * @returns the initialState
  */
 export function signOut(){
     return (dispatch, getState) => {
+        localStorage.clear();
+        sessionStorage.clear();
         dispatch(actions.reset())
     } 
 }
@@ -52,7 +54,7 @@ export function fetchUserToken(userLogin){
             if(response.status === 400) { console.log('invalid fields') }
             if(response.status === 500) { 
                 <Error responseStatus={500}/> }
-            if(response.status === 401) { dispatch(signOut()) }
+            if(response.status === 401) { dispatch(actions.reset()) }
 
             const data = await response.json();  
 
@@ -76,10 +78,15 @@ export function fetchUserData(token){
     return async (dispatch, getState) => {
 
         const status = selectUser(getState()).dataStatus
-
+        
         if((status === 'pending') || (status === 'updating')){
             return;
         }
+        if(status === 'rejected'){
+            dispatch(signOut())
+            return (<Login /> );
+        }
+
         dispatch(actions.userDataFetching(token));
 
         const options = {
@@ -93,13 +100,10 @@ export function fetchUserData(token){
             const response = await fetch('http://localhost:3001/api/v1/user/profile', options)
             
             if(response.status === 400) { console.log('invalid fields') }
-            if(response.status === 500) { 
-                <Error responseStatus={500}/>
-            }
+            if(response.status === 500) { <Error responseStatus={500}/> }
             if(response.status === 401) { dispatch(signOut()) }
             
             const data = await response.json();  
-
             dispatch(actions.userDataResolved(token, data.body))
 
         }

@@ -1,6 +1,8 @@
 @import '../../pages/Login/login.scss';
 @import '../../pages/Profile/profile.scss';
 @import '../../pages/Error/error.scss';
+@import '../../pages/Home/home.scss';
+@import '../../components/Spinner/spinner.scss';
 
 body {
   margin: 0;
@@ -41,10 +43,11 @@ header {
 .headerItem{
   display: flex;
   justify-content: space-between;
+
 }
-// .main-nav-item .router-link-exact-active {
-//   color: #42b983;
-// }
+nav.headerItem > div:nth-child(1) > a:hover {
+  color: #42b983;
+}
 
 #signOut{
   display: flex;
@@ -67,7 +70,6 @@ header {
 
 .main-nav-item-signin{
   font-weight: bold;
-
 }
 
 .main-nav-item {
@@ -75,8 +77,9 @@ header {
   align-items: center;
 
   &:hover {
-    text-decoration: underline;
-    // color: #42b983;
+    text-decoration: none;
+    cursor: pointer;
+    color: #42b983;
   }
 
   & > svg{
@@ -97,59 +100,6 @@ header {
 .main-nav-logo-image {
   max-width: 100%;
   width: 200px;
-}
-
-.hero {
-  background-image: url('../../assets/bank-tree.jpeg');
-  background-position: 0 -50px;
-  background-size: cover;
-  background-repeat: no-repeat;
-  height: 300px;
-  position: relative;
-}
-
-.hero-content {
-  position: relative;
-  top: 2rem;
-  width: 200px;
-  background: white;
-  padding: 2rem;
-  text-align: left;
-  margin: 0 auto;
-}
-
-.hero-content .subtitle {
-  font-weight: bold;
-  font-size: 1rem;
-  margin: 0;
-}
-
-.hero-content .text {
-  margin-bottom: 0;
-  font-size: 0.9rem;
-}
-
-@media (min-width: 920px) {
-  .hero {
-    height: 400px;
-    background-position: 0% 33%;
-  }
-
-  .hero-content {
-    position: absolute;
-    top: 50px;
-    right: 50px;
-    width: 300px;
-    margin: 2rem;
-  }
-
-  .hero-content .subtitle {
-    font-size: 1.5rem;
-  }
-
-  .hero-content .text {
-    font-size: 1.2rem;
-  }
 }
 
 .features {
@@ -197,52 +147,4 @@ header {
 .header {
   color: #fff;
   margin-bottom: 2rem;
-}
-
-#editName{
-  display: flex;
-  flex-direction: column;
-  margin : 5px auto;
-
-  > #editName_inputs{
-    display: flex;
-    justify-content: center;
-
-    > .input-wrapper{
-      width: 30%;
-      margin: 10px 10px;
-    }
-  }
-
-  > #editName_buttons{
-    display: flex;
-    justify-content: center;
-
-    > button{
-      margin: 10px 10px;
-      width: 100px;
-      border: #00bc77 solid 1px;
-      color: #00bc77;
-    }
-  }
-
-  > button{
-    color: #00bc77;
-    border-color: #00bc77;
-    background-color: #fff;
-  }
-}
-
-#editDiv{
-  display: flex;
-  justify-content: center;
-}
-
-.invalid_fields{
-  font-size: 1.2rem;
-  color: crimson;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  padding: 4px;
-  background-color: rgb(220, 20, 60, 0.3);
 }

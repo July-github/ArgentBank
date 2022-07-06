@@ -8,6 +8,7 @@ import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { fetchUserData, updateUserData, signOut } from '../../redux/actions'
 import { useNavigate } from 'react-router-dom'
+import Spinner from '../../components/Spinner'
 
 function Profile(){
     const userData = useSelector(selectUser)
@@ -61,7 +62,7 @@ function Profile(){
     }
 
     return(
-        isLoading? <div>Loading...</div> :
+        isLoading? <Spinner /> :
         <div>
             <main className="main bg-dark">
                 <div className="header">

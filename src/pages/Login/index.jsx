@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { fetchUserData, fetchUserToken, setRemember } from '../../redux/actions'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectUser } from '../../redux/selectors'
+import Spinner from '../../components/Spinner'
 
 function Login(){
     const dispatch = useDispatch()
@@ -41,7 +42,7 @@ function Login(){
     }
 
     return(
-        isLoading? <div>Loading...</div>
+        isLoading? <Spinner />
         :
         <main className="main bg-dark">
             <section className='sign-in-content'>

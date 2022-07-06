@@ -82,10 +82,6 @@ export function fetchUserData(token){
         if((status === 'pending') || (status === 'updating')){
             return;
         }
-        if(status === 'rejected'){
-            dispatch(signOut())
-            return (<Login /> );
-        }
 
         dispatch(actions.userDataFetching(token));
 
@@ -102,7 +98,10 @@ export function fetchUserData(token){
             if(response.status === 400) { console.log('invalid fields') }
             if(response.status === 500) { <Error responseStatus={500}/> }
             if(response.status === 401) { dispatch(signOut()) }
-            
+            if(status === 'rejected'){
+                dispatch(signOut())
+                return;
+            }
             const data = await response.json();  
             dispatch(actions.userDataResolved(token, data.body))
 

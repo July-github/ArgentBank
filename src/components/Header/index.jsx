@@ -37,7 +37,7 @@ function Header(){
             </nav>
             <nav className='headerItem'>
                 <div className='main-nav-item'>
-                    <Link to='/'>
+                    <Link to='/login'>
                         <FaUserCircle className="main-nav-item-logo" />
                     </Link>
                 </div>

@@ -8,7 +8,7 @@ Phase 1 : Authentification des utilisateurs - Création d'une application web pe
 
 Phase 2 : Transactions - Il s’agirait de spécifier les endpoints d’API nécessaires pour une éventuelle deuxième mission une fois que nous aurons terminé la première.
 
-![library-react](https://user-images.githubusercontent.com/76209231/169810015-87e342f6-ce87-4033-8e16-8194630f88e0.svg)
+![library-react-redux](https://user-images.githubusercontent.com/76209231/178037472-04da7df1-be59-4179-8c38-f87389cdb6bb.svg)
 ![tool-create-react-app](https://user-images.githubusercontent.com/76209231/169812977-cf802d09-7b36-4b2c-97ab-143955aef1fa.svg)
 ![tool-sass](https://user-images.githubusercontent.com/76209231/169813018-fb083b76-0ea4-4a9c-816a-19786ccdd023.svg)
 ![state-manager-redux](https://user-images.githubusercontent.com/76209231/176850855-196e3c78-434b-415d-8207-9b9483b819e6.svg)

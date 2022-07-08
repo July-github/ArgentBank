@@ -1,7 +1,7 @@
 import Error from '../pages/Error/index'
 import { actions } from './reducer'
 import { selectUser } from '../redux/selectors'
-import Login from '../pages/Login'
+
 /**
  * Reset the user's datas in Redux state
  * @returns the initialState
@@ -25,9 +25,9 @@ export function setRemember(token, remember){
 }
 
 /**
- * Thunk action creator that fetch the user's e-mail & password to the server
- * @param {object} userLogin 
- * @returns a thunk that sends back the user's token
+ * Thunk action creator fetching the user's e-mail & password to the server
+ * @param {object} userLogin //{ email, password }
+ * @returns a thunk sending back the user's token
  */
 export function fetchUserToken(userLogin){
 
@@ -69,9 +69,9 @@ export function fetchUserToken(userLogin){
 }
 
 /**
- * Thunk action creator that fetches the user's token to the server
+ * Thunk action creator fetching the user's token to the server
  * @param {jwt} token 
- * @returns a thunk that sends back the user's datas
+ * @returns a thunk sending back the user's datas
  */
 export function fetchUserData(token){
 
@@ -113,11 +113,11 @@ export function fetchUserData(token){
 }
 
 /**
- * Thunk action creator that updates the user's data to the server
+ * Thunk action creator updating the user's datas to the server
  * @param {jwt} token 
  * @param {string} firstName 
  * @param {string} lastName 
- * @returns a thunk that fetches the new datas
+ * @returns a thunk fetching the new datas
  */
 export function updateUserData(token, firstName, lastName){
 

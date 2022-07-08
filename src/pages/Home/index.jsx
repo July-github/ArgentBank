@@ -8,7 +8,6 @@ import React from 'react'
 function Home(){
 
     return(
-        <>
         <main>
             <div className="hero">
                 <section className="hero-content">
@@ -37,8 +36,7 @@ function Home(){
                     featureInfos='We use top of the line encryption to make sure your data and money is always safe.'
                 />
             </section>
-      </main>
-      </>
+        </main>
     )
 }
 

@@ -25,7 +25,7 @@ function Profile(){
         
         if(!userData.data){
 
-            if((token)) {
+            if(token) {
                 dispatch(fetchUserData(token))
                 navigate('/profile')
             }
@@ -66,43 +66,43 @@ function Profile(){
         <div>
             <main className="main bg-dark">
                 <div className="header">
-                        {nameEdition?
-                            <>
-                            <h1>Welcome back !</h1>
-                            {invalid ? <div className='invalid_fields'>Invalid fields</div> : null}
-                            <form id="editName"  onSubmit={(e) => editName(e)}>
-                                <div id='editName_inputs'>
-                                    <FormInput className='editFirstName'
+                    {nameEdition?
+                        <>
+                        <h1>Welcome back !</h1>
+                        {invalid ? <div className='invalid_fields'>Invalid fields</div> : null}
+                        <form id="editName"  onSubmit={(e) => editName(e)}>
+                            <div id='editName_inputs'>
+                                <FormInput className='editFirstName'
+                                type='text'
+                                label=''
+                                value={userData.data.firstName}
+                                setValue={(e) => setFirstN(e.target.value)}
+                                />
+                                <FormInput className='editLastName'
                                     type='text'
                                     label=''
-                                    value={userData.data.firstName}
-                                    setValue={(e) => setFirstN(e.target.value)}
-                                    />
-                                    <FormInput className='editLastName'
-                                        type='text'
-                                        label=''
-                                        value={userData.data.lastName}
-                                        setValue={(e) => setLastN(e.target.value)}            
-                                    />
-                                </div>
-                                <div id='editName_buttons'>
-                                    <button type='submit' className='saveEditButton'>
-                                        Save</button>
-                                    <button className='cancelEditButton' onClick={(e) => (
-                                            e.preventDefault(e),
-                                            setNameEdition(false))
-                                        }>
-                                        Cancel</button>
-                                </div>
-                            </form>
-                            </>
-                            :
-                            <>
-                            <h1>Welcome back<br />{userData.data.firstName} {userData.data.lastName} !</h1>
-                            <button onClick={() => setNameEdition(true)} className='edit-button'>
-                                Edit Name</button>
-                            </>
-                            }
+                                    value={userData.data.lastName}
+                                    setValue={(e) => setLastN(e.target.value)}            
+                                />
+                            </div>
+                            <div id='editName_buttons'>
+                                <button type='submit' className='saveEditButton'>
+                                    Save</button>
+                                <button className='cancelEditButton' onClick={(e) => (
+                                        e.preventDefault(e),
+                                        setNameEdition(false))
+                                    }>
+                                    Cancel</button>
+                            </div>
+                        </form>
+                        </>
+                        :
+                        <>
+                        <h1>Welcome back<br />{userData.data.firstName} {userData.data.lastName} !</h1>
+                        <button onClick={() => setNameEdition(true)} className='edit-button'>
+                            Edit Name</button>
+                        </>
+                    }
                 </div>
                 <h2 className="sr-only">Accounts</h2>
                 <AccountWrap 

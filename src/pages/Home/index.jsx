@@ -12,13 +12,13 @@ function Home(){
     const dispatch = useDispatch()
     const token = (localStorage.getItem('token') || sessionStorage.getItem('token'))
 
-    useEffect(() => {
-        
-        if(token) {
-            dispatch(fetchUserData(token))
-        }
+        useEffect(() => {
+            
+            if(token) {
+                dispatch(fetchUserData(token))
+            }
 
-    }, [dispatch, token])
+        }, [dispatch, token])
 
 
     return(

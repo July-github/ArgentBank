@@ -17,6 +17,8 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  justify-content: center;
+  height: 1vh;
 }
 
 .sr-only {
@@ -33,11 +35,26 @@ body {
   white-space: nowrap !important; /* 3 */
 }
 
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+  width: 100%;
+  min-height:80%;
+  overflow: scroll;
+}
+
+.bg-dark {
+  background-color: #12002b;
+}
+
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 5px 20px;
+  padding: 10px 20px;
 }
 
 .headerItem{
@@ -136,7 +153,7 @@ nav.headerItem > div:nth-child(1) > a:hover {
   display: flex;
   justify-content: center;
   border-top: 2px solid #ccc;
-  padding: 2rem 0 1.5rem;
+  padding: 10px 0;
 }
 
 .footer-text {

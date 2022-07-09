@@ -4,8 +4,22 @@ import chat from '../../assets/icon-chat.png'
 import money from '../../assets/icon-money.png'
 import security from '../../assets/icon-security.png'
 import React from 'react'
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { fetchUserData } from '../../redux/actions'
 
 function Home(){
+    const dispatch = useDispatch()
+    const token = (localStorage.getItem('token') || sessionStorage.getItem('token'))
+
+    useEffect(() => {
+        
+        if(token) {
+            dispatch(fetchUserData(token))
+        }
+
+    }, [dispatch, token])
+
 
     return(
         <main>

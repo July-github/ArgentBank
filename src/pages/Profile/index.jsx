@@ -63,7 +63,6 @@ function Profile(){
 
     return(
         isLoading? <Spinner /> :
-        <div>
             <main className="main bg-dark">
                 <div className="header">
                     {nameEdition?
@@ -121,8 +120,7 @@ function Profile(){
                     accountDescription='Current Balance'
                 />
             </main>
-        </div>
-    )
+        )
 }
 
 export default Profile

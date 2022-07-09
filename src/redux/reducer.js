@@ -43,7 +43,7 @@ const { actions, reducer } = createSlice({
                     draft.isLoading = true;
                     return;
                 }
-                },
+            },
         },
         userDataResolved: { 
             prepare: (token, data) => ({
@@ -60,7 +60,8 @@ const { actions, reducer } = createSlice({
                     draft.isLoading = false;
                     return;
                 }
-        }},
+            }
+        },
         userDataRejected: {
             prepare: (token, error) => ({
                 payload: {token, error}
@@ -76,7 +77,8 @@ const { actions, reducer } = createSlice({
                     draft.isLoading = false;
                     return;
                 }
-        }},
+            }
+        },
         userTokenFetching: {
             prepare: (userLogin) => ({
                 payload: {userLogin}
@@ -101,7 +103,8 @@ const { actions, reducer } = createSlice({
                     draft.isLoading = true;
                     return;
                 }
-        }},
+            }
+        },
         userTokenResolved: {
             prepare: (userLogin, token) => ({
                 payload: {userLogin, token}
@@ -116,7 +119,8 @@ const { actions, reducer } = createSlice({
                     draft.isLoading = false;
                     return;
                 }
-        }},
+            }
+        },
         userTokenRejected: {
             prepare: (userLogin, error) => ({
                 payload: {userLogin, error}
@@ -132,7 +136,8 @@ const { actions, reducer } = createSlice({
                     draft.isLoading = false;
                     return;
                 }
-        }},
+            }
+        },
         userUpdateProfile: {
             prepare: (token, firstName, lastName) => ({
                 payload: {token, firstName, lastName}
